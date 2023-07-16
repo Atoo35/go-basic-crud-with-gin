@@ -8,6 +8,7 @@ import (
 	"github.com/Atoo35/basic-crud/auth"
 	"github.com/Atoo35/basic-crud/books"
 	"github.com/Atoo35/basic-crud/configurations"
+	"github.com/Atoo35/basic-crud/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,6 +23,7 @@ func init() {
 		log.Fatal(err)
 	}
 	configurations.Connect(&config)
+	utils.SetSecretKey([]byte(config.JWT_SECRET))
 }
 
 func main() {

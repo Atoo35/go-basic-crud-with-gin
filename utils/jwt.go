@@ -6,7 +6,11 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var sampleSecretKey = []byte("SecretYouShouldHide")
+var secretKey []byte
+
+func SetSecretKey(key []byte) {
+	secretKey = key
+}
 
 type MyCustomClaims struct {
 	Username string `json:"username"`
@@ -15,7 +19,7 @@ type MyCustomClaims struct {
 
 func VerifyJWT(tokenString string) (string, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return sampleSecretKey, nil
+		return secretKey, nil
 	})
 
 	if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
@@ -36,7 +40,7 @@ func GenerateJWT(username string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(sampleSecretKey)
+	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
 		return "Signing Error", err
 	}
